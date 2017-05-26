@@ -7,7 +7,12 @@
 
     <!-- dependencies -->
     <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="path/to/xss-escape.js"></script>
     <script>
+      var escapedString = xssEscape(unsafeString);
+    </script>
+    <script>
+
       // YOU DO NOT NEED TO EDIT THIS CODE
       if (!/(&|\?)username=/.test(window.location.search)) {
         var newSearch = window.location.search;
@@ -21,11 +26,22 @@
     <!-- your scripts -->
     <script src="env/config.js"></script>
     <script src="scripts/app.js"></script>
+
   </head>
   <body>
     <div id="main">
       <h1>chatterbox</h1>
-      <!-- Your HTML goes here! -->
+      <h2>Room:</h2>
+        <select name="rooms">
+          <option value="newroom">New room</option>
+          <option value="lobby" selected="selected">Lobby</option>
+        </select>
+
+        <form>
+          <input type="text" name="message"></input>
+          <input type="submit" name="submit"></input>
+        </form>
+
     </div>
     <div id="chats"></div>
   </body>
