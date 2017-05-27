@@ -51,9 +51,26 @@ app.fetch = function() {
   });
 };
 
-app.prepend = function(text, username) {
+app.renderMessage = function(text, username) {
   $('#chats').prepend(`<div class="messageWindow">${username}: ${text}</div>`);
 };
+
+app.clearMessages = function() {
+  $('#chats').empty();
+};
+
+app.renderRoom = function() {
+
+};
+
+app.handleUsernameClick = function() {
+
+};
+
+app.handleSubmit = function() {
+
+};
+
 
 $(document).ready(function() {
 
