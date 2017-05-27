@@ -8,6 +8,7 @@
     <!-- dependencies -->
     <script src="bower_components/jquery/dist/jquery.js"></script>
     <script src="path/to/xss-escape.js"></script>
+    <script src="bower_components/underscore/underscore-min.js"</script>
     <script>
       var escapedString = xssEscape(unsafeString);
     </script>
@@ -22,6 +23,7 @@
         newSearch += 'username=' + (prompt('What is your name?') || 'anonymous');
         window.location.search = newSearch;
       }
+      var username = window.location.search;
     </script>
     <!-- your scripts -->
     <script src="env/config.js"></script>
@@ -32,16 +34,16 @@
     <div id="main">
       <h1>chatterbox</h1>
       <h2>Room:</h2>
-        <select name="rooms">
+        <select name="roomname">
           <option value="newroom">New room</option>
           <option value="lobby" selected="selected">Lobby</option>
         </select>
 
-        <form>
-          <input type="text" name="message"></input>
+        <form id="messageWindow">
+          <input type="text" name="text" id="text"></input>
           <input type="submit" name="submit"></input>
         </form>
-
+        <button type="button" class="clear-chat">Clear chat messages</button>
     </div>
     <div id="chats"></div>
   </body>
