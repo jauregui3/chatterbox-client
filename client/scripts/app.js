@@ -2,16 +2,32 @@ var app = {};
 
 app.server = 'http://parse.hrr.hackreactor.com/chatterbox/classes/messages';
 
+app.username = 'anonymous';
+
+app.roomname = 'lobby';
 
 app.messages = [];
 
-app.friends = [];
+app.friends = {};
 
-app.rooms = [];
+app.lastMessageId = 0;
 
 app.init = function () {
+  app.username = window.location.search.substr(10);
+
+  app.$message = $('#message');
+  app.$chats = $('#chats');
+  app.$roomSelect = $('#roomSelect');
+  app.$send = $('#send');
+
+  app.$chats.on('click', '.username', app.handleUsernameClick);
+
   app.fetch();
   app.handleSubmit();
+
+  /*setInterval(function(){
+    app.fetch();
+  }, 3000);*/
 };
 
 app.send = function(message) {
@@ -36,25 +52,66 @@ app.fetch = function() {
     // This is the url you should use to communicate with the parse API server.
     url: app.server,
     type: 'GET',
-    // contentType: 'application/json',
+    contentType: 'application/json',
+    data: {order: '-createdAt'},
     success: function(data) {
-      data.results.forEach(function (message) {
-        app.messages.push(message);
-      });
+      if (!data.results || !data.results.length) {
+        return;
+      }
+
+      var mostRecentMessage = data.results[data.results.length-1];
+
+      if (mostRecentMessage.objectId !== app.lastMessageId) {
+        app.renderMessages(data.results);
+        app.lastMessageId = mostRecentMessage.objectId;
+      }
+
     },
+    error: function(error) {
+      console.error('chatterbox: Failed to fetch messages', error);
+    }
   });
 };
 
-app.renderMessage = function(text, username) {
-  $('#chats').prepend(`<div class="messageWindow">${username}: ${text}</div>`);
+app.renderMessage = function(message) {
+  // $('#chats').prepend(`<div class="messageWindow">${username}: ${text}</div>`);
+  if (!message.roomname) {
+    message.roomname = 'lobby';
+  }
+
+  var $chat = $('<div class="chat"/>');
+  var $username = $('<span class="username"/>');
+
+  $username.text(message.username + ': ').attr('data-roomname', message.roomname).attr('data-username', message.username).appendTo($chat);
+
+  if (app.friends[message.username] === true) {
+    $username.addClass('friend');
+  }
+
+  var $message = $('<br><span/>');
+  $message.text(message.text).appendTo($chat);
+
+  app.$chats.append($chat);
+};
+
+app.renderMessages = function(messages) {
+  app.clearMessages();
+
+  if (Array.isArray(messages)) {
+    messages.filter(function(message) {
+      return (message.roomname === app.roomname) || (app.roomname === 'lobby' && !message.roomname);
+    }).forEach(app.renderMessage);
+  }
 };
 
 app.clearMessages = function() {
   $('#chats').empty();
 };
 
-app.renderRoom = function() {
-
+app.renderRoom = function(roomName) {
+  var form = document.querySelector("form");
+  $('form #roomSelect').append(`<option value="${roomName}">${roomName}</option>`);
+  form.reset();
 };
 
 app.handleUsernameClick = function() {
@@ -64,29 +121,16 @@ app.handleUsernameClick = function() {
 app.handleSubmit = function() {
   var message = {};
 
-  var getQueryVariable = function(variable) {
-    var query = window.location.search.substring(1);
-    var vars = query.split("&");
-    for (var i=0; i < vars.length; i++) {
-      var pair = vars[i].split("=");
-      if (pair[0] === variable){
-        return pair[1];
-      }
-    }
-    return false;
-  };
-
   var form = document.querySelector("form");
 
   form.addEventListener("submit", function(event) {
-    event.preventDefault();
     message.roomname = form.roomname.value;
     message.text = form.text.value;
-    message.username = getQueryVariable('username');
-    console.log(message);
+    message.username = app.username;
     app.send(message);
     form.reset();
-
+    app.fetch();
+    event.preventDefault();
   });
 
 };
@@ -98,29 +142,12 @@ $(document).ready(function() {
 
 });
 
-//Method to get messages from the server
 
-//A way to refresh displayed messages
+/* Function for adding new room
 
-//Allow to users to select a name for themselves
-
-//Allow users to send messages
-
-//Allow users to create rooms and enter that room
-
-//Display messages from a specific room
-
-//Allow users to friend other users by clicking their user name
-
-//Display all messages by friends sent in bold
-
-//Add ability to clear all chat messages
-
-/*  $("form").submit(function(){
-    var text = $("form").getElementById('text');
-    message = {
-      username: newsearch,
-      text: text,
-      roomname: 'test'
-    };
-    console.log(message);*/
+//if newroom is selected
+    if (form.roomname.value === 'newroom') {
+      event.preventDefault();
+      app.renderRoom(form.text.value);
+    } else {
+*/
