@@ -88,3 +88,9 @@ form input[type=text] {
     background-color: #0090da;
 }
 
+#chats .messageWindow {
+ background-color: grey;
+ margin: 5px 5px;
+ color: yellow;
+}
+
