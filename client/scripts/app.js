@@ -11,7 +11,7 @@ app.rooms = [];
 
 app.init = function () {
   app.fetch();
-
+  app.handleSubmit();
 };
 
 app.send = function(message) {
@@ -40,12 +40,6 @@ app.fetch = function() {
     success: function(data) {
       data.results.forEach(function (message) {
         app.messages.push(message);
-        /*if (app.rooms.hasOwnProperty[message.roomname]){
-         app.rooms[message.roomname].push(message);
-        } else {
-         app.rooms[message.roomname] = [];
-         app.rooms[message.roomname].push(message);
-        }*/
       });
     },
   });
@@ -69,27 +63,38 @@ app.handleUsernameClick = function() {
 
 app.handleSubmit = function() {
   var message = {};
-  /*$('#messageSender').submit(function(){
-    console.log('hi');
-    var form = document.getElementById("messageSender").value;
-    console.log(form);
-  });
 
-  app.send(message);*/
+  var getQueryVariable = function(variable) {
+    var query = window.location.search.substring(1);
+    var vars = query.split("&");
+    for (var i=0; i < vars.length; i++) {
+      var pair = vars[i].split("=");
+      if (pair[0] === variable){
+        return pair[1];
+      }
+    }
+    return false;
+  };
+
   var form = document.querySelector("form");
+
   form.addEventListener("submit", function(event) {
+    event.preventDefault();
     message.roomname = form.roomname.value;
     message.text = form.text.value;
-    console.log(username);
-    event.preventDefault();
+    message.username = getQueryVariable('username');
+    console.log(message);
+    app.send(message);
+    form.reset();
+
   });
-  console.log('current message is', message);
+
 };
 
 
 $(document).ready(function() {
 
-  app.handleSubmit();
+  app.init();
 
 });
 
