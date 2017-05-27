@@ -68,14 +68,28 @@ app.handleUsernameClick = function() {
 };
 
 app.handleSubmit = function() {
+  var message = {};
+  /*$('#messageSender').submit(function(){
+    console.log('hi');
+    var form = document.getElementById("messageSender").value;
+    console.log(form);
+  });
 
+  app.send(message);*/
+  var form = document.querySelector("form");
+  form.addEventListener("submit", function(event) {
+    message.roomname = form.roomname.value;
+    message.text = form.text.value;
+    console.log(username);
+    event.preventDefault();
+  });
+  console.log('current message is', message);
 };
 
 
 $(document).ready(function() {
 
-
-
+  app.handleSubmit();
 
 });
 

@@ -24,6 +24,8 @@
         window.location.search = newSearch;
       }
       var username = window.location.search;
+      //console.log(window.location);
+      console.log(username);
     </script>
     <!-- your scripts -->
     <script src="env/config.js"></script>
@@ -34,14 +36,15 @@
     <div id="main">
       <h1>chatterbox</h1>
       <h2>Room:</h2>
-        <select name="roomname">
-          <option value="newroom">New room</option>
-          <option value="lobby" selected="selected">Lobby</option>
-        </select>
 
-        <form id="messageWindow">
+
+        <form id="messageSender">
+          <select name="roomname">
+            <option value="newroom">New room</option>
+            <option value="lobby" selected="selected">Lobby</option>
+          </select>
           <input type="text" name="text" id="text"></input>
-          <input type="submit" name="submit"></input>
+          <button type="submit" name="submit">Submit</button>
         </form>
         <button type="button" class="clear-chat">Clear chat messages</button>
     </div>
