@@ -35,18 +35,17 @@
   <body>
     <div id="main">
       <h1>chatterbox</h1>
-      <h2>Room:</h2>
+      <div id="rooms">Room:</div>
 
 
         <form id="send">
           <select name="roomname" id="roomSelect">
-            <option value="newroom">New room</option>
-            <option value="lobby" selected="selected">Lobby</option>
+            <!--<option value="newroom">New room..</option>
+            <option value="lobby" selected="selected">Lobby</option>-->
           </select>
           <input type="text" name="text" id="message"></input>
           <button type="submit" name="submit" class="submit">Submit</button>
         </form>
-        <button type="button" class="clear-chat">Clear chat messages</button>
     </div>
     <div id="chats"></div>
   </body>
