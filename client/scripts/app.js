@@ -74,7 +74,7 @@ app.fetch = function() {
 };
 
 app.renderMessage = function(message) {
-  // $('#chats').prepend(`<div class="messageWindow">${username}: ${text}</div>`);
+
   if (!message.roomname) {
     message.roomname = 'lobby';
   }
@@ -108,10 +108,15 @@ app.clearMessages = function() {
   $('#chats').empty();
 };
 
-app.renderRoom = function(roomName) {
-  var form = document.querySelector("form");
-  $('form #roomSelect').append(`<option value="${roomName}">${roomName}</option>`);
-  form.reset();
+app.renderRoom = function(room) {
+//  var form = document.querySelector("form");
+  var $option = $(`<option/>`).val(room).text(room);
+  app.$roomSelect.append($option);
+  //form.reset();
+};
+
+app.renderRoomList = function() {
+
 };
 
 app.handleUsernameClick = function() {
@@ -141,13 +146,3 @@ $(document).ready(function() {
   app.init();
 
 });
-
-
-/* Function for adding new room
-
-//if newroom is selected
-    if (form.roomname.value === 'newroom') {
-      event.preventDefault();
-      app.renderRoom(form.text.value);
-    } else {
-*/
